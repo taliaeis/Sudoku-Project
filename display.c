@@ -6,6 +6,28 @@ void destroy () {
     gtk_main_quit();
 }
 
+int *getcol(GtkGrid *super_grid, int x){
+	int *arr = malloc(sizeof(int) * 4);
+	
+	for(int i = 0; i < 4; i++){
+		GtkWidget *label = gtk_grid_get_child_at(super_grid, x, i);
+		arr[i] = atoi(gtk_label_get_text(GTK_LABEL (label)));
+	}
+
+	return arr;
+}
+
+int *getrow(GtkGrid *super_grid, int y){
+	int *arr = malloc(sizeof(int) * 4);
+
+	for(int i = 0; i < 4; i++){
+		GtkWidget *label = gtk_grid_get_child_at(super_grid, i, y);
+		arr[i] = atoi(gtk_label_get_text(GTK_LABEL (label)));
+	}
+
+	return arr;
+}
+
 int main(int argc, char *argv[]) {
 	// Widget for the popup window
 	GtkWidget *window;
