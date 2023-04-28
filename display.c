@@ -6,6 +6,7 @@ void destroy () {
     gtk_main_quit();
 }
 
+//
 int *getcol(GtkGrid *super_grid, int x){
 	int *arr = malloc(sizeof(int) * 4);
 	
@@ -76,12 +77,12 @@ int main(int argc, char *argv[]) {
 			gtk_widget_show(frame);
 		}
 	}
-
+	
 	// Make the grid and window visible
 	gtk_widget_show(super_grid);
 	gtk_widget_show(window);
-
+	
 	gtk_main();
-
+	
 	return 0;
 }
