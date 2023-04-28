@@ -8,10 +8,11 @@ void destroy () {
 
 int *getcol(GtkGrid *super_grid, int x){
 	int *arr = malloc(sizeof(int) * 4);
-	int size = sizeof(arr) / sizeof(int);
+	int size = 4;
 	
 	for(int i = 0; i < size; i++){
-		GtkWidget *label = gtk_grid_get_child_at(super_grid, x, i);
+		GtkWidget* frame = gtk_grid_get_child_at(super_grid, x, i);
+		GtkWidget* label = gtk_bin_get_child(GTK_BIN (frame));
 		arr[i] = atoi(gtk_label_get_text(GTK_LABEL (label)));
 	}
 
@@ -20,10 +21,11 @@ int *getcol(GtkGrid *super_grid, int x){
 
 int *getrow(GtkGrid *super_grid, int y){
 	int *arr = malloc(sizeof(int) * 4);
-	int size = sizeof(arr) / sizeof(int);
+	int size = 4;
 
 	for(int i = 0; i < size; i++){
-		GtkWidget *label = gtk_grid_get_child_at(super_grid, i, y);
+		GtkWidget* frame = gtk_grid_get_child_at(super_grid, i, y);
+		GtkWidget* label = gtk_bin_get_child(GTK_BIN (frame));
 		arr[i] = atoi(gtk_label_get_text(GTK_LABEL (label)));
 	}
 
@@ -92,7 +94,7 @@ int main(int argc, char *argv[]) {
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
 			// Creates a string to label each cell in the format "i,j"
-			char coords[] = {i + '0', ',',  j + '0', '\0'};
+			char coords[] = {i + '0',  j + '0', '\0'};
 			// Create a new label containing the coords
 			label = gtk_label_new(coords);
 			// Create a new border, pass in NULL so the border itself isn't labelled with anything
