@@ -8,8 +8,9 @@ void destroy () {
 
 int *getcol(GtkGrid *super_grid, int x){
 	int *arr = malloc(sizeof(int) * 4);
+	int size = sizeof(arr) / sizeof(int);
 	
-	for(int i = 0; i < 4; i++){
+	for(int i = 0; i < size; i++){
 		GtkWidget *label = gtk_grid_get_child_at(super_grid, x, i);
 		arr[i] = atoi(gtk_label_get_text(GTK_LABEL (label)));
 	}
@@ -19,13 +20,44 @@ int *getcol(GtkGrid *super_grid, int x){
 
 int *getrow(GtkGrid *super_grid, int y){
 	int *arr = malloc(sizeof(int) * 4);
+	int size = sizeof(arr) / sizeof(int);
 
-	for(int i = 0; i < 4; i++){
+	for(int i = 0; i < size; i++){
 		GtkWidget *label = gtk_grid_get_child_at(super_grid, i, y);
 		arr[i] = atoi(gtk_label_get_text(GTK_LABEL (label)));
 	}
 
 	return arr;
+}
+
+//returning 0 is false, anything else is true
+int checknum(GtkGrid *super_grid, int x, int y, int num){
+	int *arrcol;
+	int *arrrow;
+	int *arrgrid;
+	int size = 0;
+
+	arrcol = getcol(super_grid, x);
+	arrrow = getrow(super_grid, y);
+	//arrgrid = getsub(*super_grid, x, y);
+
+	size = sizeof(arrcol) / sizeof(int);
+
+	for(int i = 0; i < size; i++){
+		if(arrcol[i] == num){
+			return 0;
+		}
+
+		if(arrrow[i] == num){
+			return 0;
+		}
+
+		//if(arrgrid[i] == num){
+			//return 0;
+		//}
+	}
+
+	return 1;
 }
 
 int main(int argc, char *argv[]) {
