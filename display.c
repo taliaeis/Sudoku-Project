@@ -6,7 +6,10 @@ void destroy () {
     gtk_main_quit();
 }
 
-//
+//Gets the values in a given column
+//Params: GtkGrid *super_grid: the sudoku board; need to typecast to GTK_GRID
+//int x: x coordinate of the column to get
+//Returns: int[] of values in the column's cells
 int *getcol(GtkGrid *super_grid, int x){
 	int *arr = malloc(sizeof(int) * 4);
 	int size = 4;
@@ -20,6 +23,10 @@ int *getcol(GtkGrid *super_grid, int x){
 	return arr;
 }
 
+//Gets the values in a given row
+//Params: GtkGrid *super_grid: the sudoku board; need to typecast to GTK_GRID
+//int y: y coordinate of the row to get
+//Returns: int[] of values in the row's cells
 int *getrow(GtkGrid *super_grid, int y){
 	int *arr = malloc(sizeof(int) * 4);
 	int size = 4;
@@ -33,7 +40,11 @@ int *getrow(GtkGrid *super_grid, int y){
 	return arr;
 }
 
-//returning 0 is false, anything else is true
+//Checks for contradictions (for use when inserting numbers)
+//Params: GtkGrid *super_grid: the sudoku board; need to typecast to GTK_GRID
+//int x, int y: coordinates of the cell to check for contradictions with
+//int num: prospective number to be placed at x,y
+//Returns: 0 if there are any contradictions; some other int if there are not
 int checknum(GtkGrid *super_grid, int x, int y, int num){
 	int *arrcol;
 	int *arrrow;
