@@ -1,9 +1,24 @@
 #include <gtk/gtk.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
 void destroy () {
     gtk_main_quit();
+}
+
+int *getSub(GtkWidget * super_grid,int x,int y) {
+	int *arr = malloc(sizeof(int) * 4); 
+	int ind = 0;
+	int subx = x - (x % 2);//size at 4
+	int suby = y - (y % 2);
+	for (int j = subx; j < subx+2; j++) {
+		for (int k = suby; k < suby+2 ; k++) {
+			GtkWidget *label = gtk_grid_get_child_at(super_grid,j,k);
+			arr[ind] = atoi(gtk_label_get_text(GTK_LABEL (label)));
+			ind++;
+		}
+	}
 }
 
 int main(int argc, char *argv[]) {
