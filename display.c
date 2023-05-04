@@ -19,6 +19,7 @@ int *getSub(GtkWidget * super_grid,int x,int y) {
 			ind++;
 		}
 	}
+	return arr;
 }
 
 int main(int argc, char *argv[]) {
