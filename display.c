@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 void destroy () {
     gtk_main_quit();
@@ -72,6 +73,27 @@ int checknum(GtkGrid *super_grid, int x, int y, int num){
 	}
 
 	return 1;
+}
+
+bool test(int *coords){
+	int x = coords[0];
+	int y = coords[1];	
+
+	for(int i = 1; i < 10; i++){
+		if(checknum(super_grid, x, y, i) == 1){
+			//tests next cell
+			bool next = test(next_empty_cell(x, y));
+			
+			if(next == false){
+				continue;
+			}
+			if(next == true){
+				//set value in cell to i
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 int main(int argc, char *argv[]) {
