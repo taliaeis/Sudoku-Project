@@ -101,7 +101,7 @@ void init_grid(char *filename) {
 	char c = fgetc(fp);
 
 	if (c == EOF) {
-		fprintf(stderr, "Error: Please enter a non-empty Sudoku starting file\n");
+		fprintf(stderr, "Error: Please enter a non-empty Sudoku starter file\n");
 		exit(1);
 	}
 
@@ -134,7 +134,7 @@ void init_grid(char *filename) {
 		for (int y = 0; y < size; y++) {
 			c = fgetc(fp);
 			if (c == EOF || c == '\n') {
-				fprintf(stderr, "Error: Incorrect number of values in starter for Sudoku of size %d\n", size);
+				fprintf(stderr, "Error: Incorrect number of values in starter file for Sudoku of size %d\n", size);
 				exit(1);
 			}
 
@@ -149,7 +149,7 @@ void init_grid(char *filename) {
 			
 			// Check for invalid digits
 			if (c - '0' > (size * size) || c - '0' == 0) {
-				fprintf(stderr, "Error: Invalid digit %c for Sudoku of size %d\n", c, size);
+				fprintf(stderr, "Error: Invalid digit %c in starter file for Sudoku of size %d\n", c, size);
 				exit(1);
 			}
 
