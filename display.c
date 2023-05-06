@@ -13,14 +13,13 @@ void destroy() {
 }
 
 
-int * next_empty_cell() {
-	int coor[2];
-	int x,y = 0;
+int *next_empty_cell() {
+	int *coor = malloc(sizeof(int) * 2);
 	for (int y = 0; y < size; y++) {
 		for (int x = 0; x < size; x++) {
-			GtkWidget* frame = gtk_grid_get_child_at(super_grid, x, y);
-			GtkWidget* label = gtk_bin_get_child(GTK_BIN (frame));	
-			if (0 == (strcmp(label, '-'))) {
+			GtkWidget* frame = gtk_grid_get_child_at(GTK_GRID (super_grid), x, y);
+			GtkWidget* label = gtk_bin_get_child(GTK_BIN (frame));
+			if (0 == (strcmp(gtk_label_get_text(GTK_LABEL (label)), " "))) {
 				coor[0] = x;
 				coor[1] = y;
 				return coor;
@@ -45,7 +44,7 @@ int *getsub(int x,int y) {
 	int suby = y - (y % sqrtSize);
 	for (int j = subx; j < subx + sqrtSize; j++) {
 		for (int k = suby; k < suby + sqrtSize; k++) {	
-			GtkWidget* frame = gtk_grid_get_child_at(super_grid, i, y);
+			GtkWidget* frame = gtk_grid_get_child_at(GTK_GRID (super_grid), j, k);
 			GtkWidget* label = gtk_bin_get_child(GTK_BIN (frame));	
 			arr[ind] = atoi(gtk_label_get_text(GTK_LABEL (label)));
 			ind++;
