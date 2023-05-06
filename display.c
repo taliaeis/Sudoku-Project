@@ -15,6 +15,9 @@ void destroy() {
 
 int *next_empty_cell() {
 	int *coor = malloc(sizeof(int) * 2);
+	// If no empty cells are left, return coords (-1, -1)
+	coor[0] = -1;
+	coor[1] = -1;
 	for (int y = 0; y < size; y++) {
 		for (int x = 0; x < size; x++) {
 			GtkWidget* frame = gtk_grid_get_child_at(GTK_GRID (super_grid), x, y);
@@ -26,16 +29,12 @@ int *next_empty_cell() {
 			}
 		}
 	}
-
-	// If no empty cells are left, return coords (-1, -1)
-	coor[0] = -1;
-	coor[1] = -1;
 	return coor;
 }
 
 
 int *getsub(int x,int y) {
-	int *arr = malloc(sizeof(int) * 4); 
+	int *arr = malloc(sizeof(int) * size); 
 	int ind = 0;
 	int sqrtSize;
 	if (size == 9) {
@@ -137,8 +136,15 @@ bool test(int *coords){
 		return true;
 	}
 
-	for(int i = 1; i < size; i++){
+	for(int i = 1; i <= size; i++){
 		if(checknum(x, y, i) == 1){
+			GtkWidget* frame = gtk_grid_get_child_at(GTK_GRID (super_grid), x, y);
+			GtkWidget* label = gtk_bin_get_child(GTK_BIN (frame));
+			char c = i + '0';
+			char arr[2];
+			arr[0] = c;
+			gtk_label_set_text(GTK_LABEL (label), arr);
+			
 			//tests next cell
 			bool next = test(next_empty_cell());
 			
@@ -146,12 +152,6 @@ bool test(int *coords){
 				continue;
 			}
 			if(next == true){
-				GtkWidget* frame = gtk_grid_get_child_at(GTK_GRID (super_grid), x, y);
-				GtkWidget* label = gtk_bin_get_child(GTK_BIN (frame));
-				char c = i + '0';
-				char arr[2];
-				arr[0] = c;
-				gtk_label_set_text(GTK_LABEL (label), arr);
 				return true;
 			}
 		}
@@ -275,7 +275,7 @@ int main(int argc, char *argv[]) {
 	gtk_widget_show(super_grid);
 	gtk_widget_show(window);
 
-
+	test(next_empty_cell());
 
 	gtk_main();
 	
