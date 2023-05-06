@@ -26,6 +26,11 @@ int *next_empty_cell() {
 			}
 		}
 	}
+
+	// If no empty cells are left, return coords (-1, -1)
+	coor[0] = -1;
+	coor[1] = -1;
+	return coor;
 }
 
 
@@ -118,6 +123,11 @@ int checknum(int x, int y, int num){
 bool test(int *coords){
 	int x = coords[0];
 	int y = coords[1];	
+	
+	// If coords are negative, all cells are full
+	if (x == -1) {
+		return true;
+	}
 
 	for(int i = 1; i < size; i++){
 		if(checknum(x, y, i) == 1){
