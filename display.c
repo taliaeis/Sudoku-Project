@@ -212,7 +212,8 @@ void init_grid(char *filename) {
 			// Update label text to starter value
 			frame = gtk_grid_get_child_at(GTK_GRID (super_grid), x, y);
 			label = gtk_bin_get_child(GTK_BIN (frame));
-			gtk_label_set_text(GTK_LABEL (label), text);
+			//gtk_label_set_text(GTK_LABEL (label), text);
+			gtk_label_set_markup(GTK_LABEL (label), text);
 		}
 	}
 
