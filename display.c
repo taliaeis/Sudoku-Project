@@ -97,6 +97,8 @@ int checknum(int x, int y, int num){
 	int *arrcol;
 	int *arrrow;
 	int *arrsub;
+	
+	int check = 1;
 
 	arrcol = getcol(x);
 	arrrow = getrow(y);
@@ -105,25 +107,31 @@ int checknum(int x, int y, int num){
 
 	for(int i = 0; i < size; i++){
 		if(arrcol[i] == num){
-			return 0;
+			check = 0;
 		}
 
 		if(arrrow[i] == num){
-			return 0;
+			check = 0;
 		}
 
 		if(arrsub[i] == num){
-			return 0;
+			check = 0;
 		}
 	}
 
-	return 1;
+	free(arrcol);
+	free(arrrow);
+	free(arrsub);
+
+	return check;
 }
 
 bool test(int *coords){
 	int x = coords[0];
 	int y = coords[1];	
-	
+		
+	free(coords);
+
 	// If coords are negative, all cells are full
 	if (x == -1) {
 		return true;
