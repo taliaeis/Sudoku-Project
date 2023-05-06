@@ -13,12 +13,19 @@ void destroy() {
 }
 
 
-int * next_empty_cell(int x, int y) {
+int * next_empty_cell() {
 	int coor[2];
-	GtkWidget* frame = gtk_grid_get_child_at(super_grid, x, y);
-	GtkWidget* label = gtk_bin_get_child(GTK_BIN (frame));	
-	while (label != '-') {
-		
+	int x,y = 0;
+	for (int y = 0; y < size; y++) {
+		for (int x = 0; x < size; x++) {
+			GtkWidget* frame = gtk_grid_get_child_at(super_grid, x, y);
+			GtkWidget* label = gtk_bin_get_child(GTK_BIN (frame));	
+			if (0 == (strcmp(label, '-'))) {
+				coor[0] = x;
+				coor[1] = y;
+				return coor;
+			}
+		}
 	}
 }
 
