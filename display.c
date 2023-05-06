@@ -23,7 +23,7 @@ int * next_empty_cell(int x, int y) {
 }
 
 
-int *getSub(int x,int y) {
+int *getsub(int x,int y) {
 	int *arr = malloc(sizeof(int) * 4); 
 	int ind = 0;
 	int sqrtSize;
@@ -85,11 +85,11 @@ int *getrow(int y){
 int checknum(int x, int y, int num){
 	int *arrcol;
 	int *arrrow;
-	int *arrgrid;
+	int *arrsub;
 
 	arrcol = getcol(x);
 	arrrow = getrow(y);
-	//arrgrid = getsub(x, y);
+	arrsub = getsub(x, y);
 
 
 	for(int i = 0; i < size; i++){
@@ -101,9 +101,9 @@ int checknum(int x, int y, int num){
 			return 0;
 		}
 
-		//if(arrgrid[i] == num){
-			//return 0;
-		//}
+		if(arrsub[i] == num){
+			return 0;
+		}
 	}
 
 	return 1;
