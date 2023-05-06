@@ -275,16 +275,7 @@ int main(int argc, char *argv[]) {
 	gtk_widget_show(super_grid);
 	gtk_widget_show(window);
 
-	// Temporary code to demonstrate getrow and getcol
-	g_print("Column 1:\n");
-	for (int i = 0; i < size; i++) {
-		g_print("%d\n", getcol(0)[i]);
-	}
 
-	g_print("Row 1:\n");
-	for (int i = 0; i < size; i++) {
-		g_print("%d\n", getrow(0)[i]);
-	}
 
 	gtk_main();
 	
