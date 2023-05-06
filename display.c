@@ -2,6 +2,7 @@
 #include <gtk/gtk.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 #include <stdbool.h>
 
 int size;
@@ -9,6 +10,42 @@ GtkWidget* super_grid;
 
 void destroy() {
     gtk_main_quit();
+}
+
+
+int * next_empty_cell(int x, int y) {
+	int coor[2];
+	GtkWidget* frame = gtk_grid_get_child_at(super_grid, x, y);
+	GtkWidget* label = gtk_bin_get_child(GTK_BIN (frame));	
+	while (label != '-') {
+		
+	}
+}
+
+
+int *getSub(int x,int y) {
+	int *arr = malloc(sizeof(int) * 4); 
+	int ind = 0;
+	int sqrtSize;
+	if (size == 9) {
+		sqrtSize = 3;
+	}
+	else {
+		sqrtSize = 2;
+	}
+
+	int subx = x - (x % sqrtSize);//size at 4
+	int suby = y - (y % sqrtSize);
+	for (int j = subx; j < subx + sqrtSize; j++) {
+		for (int k = suby; k < suby + sqrtSize; k++) {	
+			GtkWidget* frame = gtk_grid_get_child_at(super_grid, i, y);
+			GtkWidget* label = gtk_bin_get_child(GTK_BIN (frame));	
+			arr[ind] = atoi(gtk_label_get_text(GTK_LABEL (label)));
+			ind++;
+
+		}
+	}
+	return arr;
 }
 
 //Gets the values in a given column
@@ -99,6 +136,7 @@ bool test(int *coords){
 }
 
 void init_grid(char *filename) {
+
 	GtkWidget *label;
 	GtkWidget *frame;
 	FILE *fp = fopen(filename, "r");
