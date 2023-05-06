@@ -85,7 +85,12 @@ bool test(int *coords){
 				continue;
 			}
 			if(next == true){
-				//set value in cell to i
+				GtkWidget* frame = gtk_grid_get_child_at(GTK_GRID (super_grid), x, y);
+				GtkWidget* label = gtk_bin_get_child(GTK_BIN (frame));
+				char c = i + '0';
+				char arr[2];
+				arr[0] = c;
+				gtk_label_set_text(GTK_LABEL (label), arr);
 				return true;
 			}
 		}
