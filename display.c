@@ -108,6 +108,11 @@ void init_grid(char *filename) {
 	// Set the side length size of the Sudoku
 	size = c - '0';
 
+	if (size != 4 || size != 9) {
+		fprintf(stderr, "Error: Invalid Sudoku size, please choose between 4 or 9\n");
+		exit(1);
+	}
+
 	// Create grid
 	super_grid = gtk_grid_new();
 
