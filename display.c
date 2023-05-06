@@ -113,10 +113,10 @@ bool test(int *coords){
 	int x = coords[0];
 	int y = coords[1];	
 
-	for(int i = 1; i < 10; i++){
+	for(int i = 1; i < size; i++){
 		if(checknum(x, y, i) == 1){
 			//tests next cell
-			bool next = test(next_empty_cell(x, y));
+			bool next = test(next_empty_cell());
 			
 			if(next == false){
 				continue;
