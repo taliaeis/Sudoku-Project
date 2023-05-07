@@ -144,6 +144,14 @@ bool test(int *coords){
 			char arr[2] = {c, '\0'};
 			gtk_label_set_text(GTK_LABEL (label), arr);
 			
+			const char *str = arr;
+			const char *format = "<span style=\"italic\">\%s</span>";
+			char *markup;
+		
+			markup = g_markup_printf_escaped(format, str);
+			gtk_label_set_markup(GTK_LABEL (label), markup);
+			g_free(markup);
+
 			//tests next cell
 			bool next = test(next_empty_cell());
 			
@@ -235,8 +243,8 @@ void init_grid(char *filename) {
 			// Update label text to starter value
 			frame = gtk_grid_get_child_at(GTK_GRID (super_grid), x, y);
 			label = gtk_bin_get_child(GTK_BIN (frame));
-			//gtk_label_set_text(GTK_LABEL (label), text);
-			gtk_label_set_markup(GTK_LABEL (label), text);
+			gtk_label_set_text(GTK_LABEL (label), text);
+			//gtk_label_set_markup(GTK_LABEL (label), text);
 		}
 	}
 
