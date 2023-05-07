@@ -145,7 +145,7 @@ bool test(int *coords){
 			gtk_label_set_text(GTK_LABEL (label), arr);
 			
 			const char *str = arr;
-			const char *format = "<span style=\"italic\">\%s</span>";
+			const char *format = "<span style=\"bold\">%s</span>";
 			char *markup;
 		
 			markup = g_markup_printf_escaped(format, str);
