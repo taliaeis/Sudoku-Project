@@ -44,7 +44,7 @@ int *getsub(int x,int y) {
 		sqrtSize = 2;
 	}
 
-	int subx = x - (x % sqrtSize);//size at 4
+	int subx = x - (x % sqrtSize);
 	int suby = y - (y % sqrtSize);
 	for (int j = subx; j < subx + sqrtSize; j++) {
 		for (int k = suby; k < suby + sqrtSize; k++) {	
