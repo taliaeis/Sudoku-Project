@@ -154,6 +154,8 @@ bool test(int *coords){
 			bool next = test(next_empty_cell());
 
 			if(next == false){
+				// Clear current label
+				gtk_label_set_text(GTK_LABEL (label), " ");
 				continue;
 			}
 			if(next == true){
