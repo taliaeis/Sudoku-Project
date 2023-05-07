@@ -141,8 +141,7 @@ bool test(int *coords){
 			GtkWidget* frame = gtk_grid_get_child_at(GTK_GRID (super_grid), x, y);
 			GtkWidget* label = gtk_bin_get_child(GTK_BIN (frame));
 			char c = i + '0';
-			char arr[2];
-			arr[0] = c;
+			char arr[2] = {c, '\0'};
 			gtk_label_set_text(GTK_LABEL (label), arr);
 			
 			//tests next cell
