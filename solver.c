@@ -125,6 +125,97 @@ int checknum(int x, int y, int num){
 	return check;
 }
 
+void first_pass(){
+        struct timespec time = {0, 250000000L};
+        //stack has room for 250 pairs of coordinates which should be enough
+        int* stack = malloc(500*sizeof(int));
+	for(int i=0; i<500; i++){
+	        stack[i]=-1;
+	}
+	//index of the last filled x coordinate on the stack
+	int last = -2;
+	//puts everything in the grid into the stack
+	for(int i=size-1; i>=0; i--){
+	        for(int j=size-1; j>=0; j--){
+		        last+=2;
+		        stack[last]=i;
+			stack[last+1]=j;
+		}
+	}
+	while(last>=0){
+	        if(last>=500){
+		        return;
+		}
+	        int x = stack[last];
+		int y = stack[last+1];
+		GtkWidget* frame = gtk_grid_get_child_at(GTK_GRID (super_grid), x, y);
+		GtkWidget* label = gtk_bin_get_child(GTK_BIN (frame));
+		stack[last]=-1;
+		stack[last+1]=-1;
+		last = last-2;
+		if (0 == (strcmp(gtk_label_get_text(GTK_LABEL (label)), " "))){
+		        int num_possible = 0;
+		        int possible = 0;
+		        for(int i=1; i<=size; i++){
+			        if(checknum(x, y, i)){
+				        num_possible++;
+					possible = i;
+				}
+			}
+			if(num_possible==0){
+			    fprintf(stderr, "Error: there are no possible values for this cell during the logic solving portion");
+			        exit(1);
+			}
+			//if only one possiblity, sets cell to that number
+			if(num_possible==1){
+			        char c = possible + '0';
+				char arr[2] = {c, '\0'};
+				const char *format = "<span font=\"36\">%s</span>";
+				char *markup = g_markup_printf_escaped(format, arr);
+				gtk_label_set_markup(GTK_LABEL (label), markup);
+				g_free(markup);
+				//Animates adding the cell
+				nanosleep(&time, NULL);
+				while(gtk_events_pending()){
+				        gtk_main_iteration();
+				}
+				//Adds cells in same row and column to stack
+				for(int i=0; i<size; i++){
+				        last+=2;
+				        stack[last]=x;
+					stack[last+1]=i;
+					last+=2;
+					stack[last]=i;
+					stack[last+1]=y;
+				}
+				//Adds cells in same subgrid to stack
+				int sqrtSize;
+				if(size==9){
+				        sqrtSize=3;
+				} else {
+				        sqrtSize=2;
+				}
+				int subx = x-(x%sqrtSize);
+				int suby = y-(y%sqrtSize);
+				for(int j=subx; j<subx+sqrtSize; j++){
+				        for(int k=suby; k<suby+sqrtSize; k++){
+					        //Leaves out cells in subgrid and column or row
+					        if(j!=x && k!=y){
+						        last+=2;
+						        stack[last]=j;
+							stack[last+1]=k;
+						}
+					}
+				}
+			}
+		}
+	}
+	free(stack);
+	
+}
+
+//Recursively implements depth first search; pass in coords of first cell
+//returns true when finished
 bool test(int *coords){
 	int x = coords[0];
 	int y = coords[1];	
@@ -225,7 +316,7 @@ void init_grid(char *filename) {
 			// Create a new border, pass in NULL so the border itself isn't labelled with anything
 			frame = gtk_frame_new(NULL);
 			// Make each frame a minimum of 100x100 (pixels?)
-			gtk_widget_set_size_request(frame, 100, 100);
+			gtk_widget_set_size_request(frame, 80, 80);
 			// Add the text into the border
 			gtk_container_add((GtkContainer*) frame, label);
 			// Add the whole cell into the grid at the correct coords, set the cell to only take up 1 row and 1 column
@@ -316,6 +407,7 @@ int main(int argc, char *argv[]) {
 	gtk_widget_show(super_grid);
 	gtk_widget_show(window);
 
+	first_pass();
 	test(next_empty_cell());
 
 	gtk_main();
