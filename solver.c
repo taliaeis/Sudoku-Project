@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
 
 int size;
 GtkWidget* super_grid;
@@ -128,6 +129,9 @@ bool test(int *coords){
 	int x = coords[0];
 	int y = coords[1];	
 		
+	// Struct used for sleeping during animation, 250000000L represents 1/4th of a second
+	struct timespec time = {0, 250000000L};
+
 	free(coords);
 
 	// If coords are negative, all cells are full
@@ -136,25 +140,48 @@ bool test(int *coords){
 	}
 
 	for(int i = 1; i <= size; i++){
+		GtkWidget* frame = gtk_grid_get_child_at(GTK_GRID (super_grid), x, y);
+		GtkWidget* label = gtk_bin_get_child(GTK_BIN (frame));
+
+		const char *format;
+		char *markup;
+
 		if(checknum(x, y, i) == 1){
-			GtkWidget* frame = gtk_grid_get_child_at(GTK_GRID (super_grid), x, y);
-			GtkWidget* label = gtk_bin_get_child(GTK_BIN (frame));
-			char c = i + '0';
+		char c = i + '0';
 			char arr[2] = {c, '\0'};
 
 			// Set label text and font size
-			const char *format = "<span font=\"36\">%s</span>";
-			char *markup = g_markup_printf_escaped(format, arr);
+			format = "<span font=\"36\">%s</span>";
+			markup = g_markup_printf_escaped(format, arr);
 
 			gtk_label_set_markup(GTK_LABEL (label), markup);
+			nanosleep(&time, NULL);
+			while(gtk_events_pending()) {
+				gtk_main_iteration();
+			}
+
 			g_free(markup);
 
 			//tests next cell
 			bool next = test(next_empty_cell());
+			
 
 			if(next == false){
+				format = "<span foreground=\"red\" font=\"36\">%s</span>";
+				markup = g_markup_printf_escaped(format, gtk_label_get_text(GTK_LABEL (label)));
+				gtk_label_set_markup(GTK_LABEL (label), markup);
+			
+				nanosleep(&time, NULL);
+				while(gtk_events_pending()) {
+					gtk_main_iteration();
+				}
+				
 				// Clear current label
 				gtk_label_set_text(GTK_LABEL (label), " ");
+				nanosleep(&time, NULL);
+				while(gtk_events_pending()) {
+					gtk_main_iteration();
+				}
 				continue;
 			}
 			if(next == true){
