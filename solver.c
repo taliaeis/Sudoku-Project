@@ -124,7 +124,8 @@ int checknum(int x, int y, int num){
 	return check;
 }
 
-bool test(int *coords){
+bool test(){
+	int *coords = next_empty_cell();
 	int x = coords[0];
 	int y = coords[1];	
 		
@@ -309,7 +310,7 @@ int main(int argc, char *argv[]) {
 	gtk_widget_show(btn_window);
 
 	//if the button is clicked, solve the sudoku
-	g_signal_connect(button, "clicked", G_CALLBACK(test(next_empty_cell())), NULL);
+	g_signal_connect(button, "clicked", G_CALLBACK(test),NULL);
 
 	gtk_main();
 	
