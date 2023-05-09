@@ -273,6 +273,18 @@ int main(int argc, char *argv[]) {
 	// Initiate the grid with the first argument, a path to a file representation of the board
 	init_grid(argv[1]);
 
+	
+	
+	// Create the window
+	GtkWidget *btn_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	// Title it "Solve!"
+	gtk_window_set_title(GTK_WINDOW (btn_window), "Solve!");
+	// Set it to destroy if it receives the signal to destroy
+	g_signal_connect(GTK_WINDOW (btn_window), "destroy", G_CALLBACK (destroy), NULL);
+	// Give it a 10px padding on the inside so items don't hit the edge
+	gtk_container_set_border_width(GTK_CONTAINER (btn_window), 10);
+
+	
 	// Create the window
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	// Title it "Sudoku!"
@@ -282,16 +294,24 @@ int main(int argc, char *argv[]) {
 	// Give it a 10px padding on the inside so items don't hit the edge
 	gtk_container_set_border_width(GTK_CONTAINER (window), 10);
 	
+	
+	//make button to initiate solving
+	GtkWidget *button = gtk_button_new_with_label("Solve");
+	
+	
 	// Add the grid to the window
 	gtk_container_add(GTK_CONTAINER (window), super_grid);
-
-	// Show grid and window
-	gtk_widget_show(super_grid);
+	gtk_container_add(GTK_CONTAINER (btn_window), button);	
+	// Show grid and window and button
+	gtk_widget_show(super_grid);	
+	gtk_widget_show(button);
 	gtk_widget_show(window);
+	gtk_widget_show(btn_window);
 
-	test(next_empty_cell());
+	//if the button is clicked, solve the sudoku
+	g_signal_connect(button, "clicked", G_CALLBACK(test(next_empty_cell())), NULL);
 
 	gtk_main();
 	
 	return 0;
-}
+	}
