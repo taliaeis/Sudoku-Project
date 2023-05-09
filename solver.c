@@ -5,6 +5,11 @@
 #include <stdbool.h>
 #include <time.h>
 
+// Constants for animation time
+long const slow = 500000000L;
+long const med = 100000000L;
+long const fast = 0L;
+
 int size;
 GtkWidget* super_grid;
 
@@ -31,7 +36,6 @@ int *next_empty_cell() {
 	}
 	return coor;
 }
-
 
 int *getsub(int x,int y) {
 	int *arr = malloc(sizeof(int) * size); 
@@ -125,8 +129,8 @@ int checknum(int x, int y, int num){
 	return check;
 }
 
-void first_pass(){
-        struct timespec time = {0, 250000000L};
+void first_pass(long speed){
+        struct timespec time = {0, speed};
         //stack has room for 250 pairs of coordinates which should be enough
         int* stack = malloc(500*sizeof(int));
 	for(int i=0; i<500; i++){
@@ -216,13 +220,13 @@ void first_pass(){
 
 //Recursively implements depth first search; pass in coords of first cell
 //returns true when finished
-bool test(){
+bool test(long speed){
 	int *coords = next_empty_cell();
 	int x = coords[0];
 	int y = coords[1];	
 		
-	// Struct used for sleeping during animation, 250000000L represents 1/4th of a second
-	struct timespec time = {0, 250000000L};
+	// Struct used for sleeping during animation
+	struct timespec time = {0, speed};
 
 	free(coords);
 
@@ -255,7 +259,7 @@ bool test(){
 			g_free(markup);
 
 			//tests next cell
-			bool next = test();
+			bool next = test(speed);
 			
 
 			if(next == false){
@@ -282,6 +286,11 @@ bool test(){
 		}
 	}
 	return false;
+}
+
+void solve(GtkWidget* widget, gpointer speed) {
+	first_pass(*((long*)speed));
+	test(*((long*)speed));
 }
 
 void init_grid(char *filename) {
@@ -380,6 +389,11 @@ void init_grid(char *filename) {
 int main(int argc, char *argv[]) {
 	// Widget for the popup window
 	GtkWidget *window;
+	// Box to pack widgets in
+	GtkWidget *box;
+	// Buttons to start solving
+	GtkWidget *button;
+	GtkWidget *button_box;
 
 	// Default gtk func
 	gtk_init(&argc, &argv);
@@ -391,18 +405,6 @@ int main(int argc, char *argv[]) {
 
 	// Initiate the grid with the first argument, a path to a file representation of the board
 	init_grid(argv[1]);
-
-	
-	
-	// Create the window
-	GtkWidget *btn_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	// Title it "Solve!"
-	gtk_window_set_title(GTK_WINDOW (btn_window), "Solve!");
-	// Set it to destroy if it receives the signal to destroy
-	g_signal_connect(GTK_WINDOW (btn_window), "destroy", G_CALLBACK (destroy), NULL);
-	// Give it a 10px padding on the inside so items don't hit the edge
-	gtk_container_set_border_width(GTK_CONTAINER (btn_window), 10);
-
 	
 	// Create the window
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -413,22 +415,39 @@ int main(int argc, char *argv[]) {
 	// Give it a 10px padding on the inside so items don't hit the edge
 	gtk_container_set_border_width(GTK_CONTAINER (window), 10);
 	
-	
-	//make button to initiate solving
-	GtkWidget *button = gtk_button_new_with_label("Solve");
-	
-	
-	// Add the grid to the window
-	gtk_container_add(GTK_CONTAINER (window), super_grid);
-	gtk_container_add(GTK_CONTAINER (btn_window), button);	
-	// Show grid and window and button
-	gtk_widget_show(super_grid);	
-	gtk_widget_show(button);
-	gtk_widget_show(window);
-	gtk_widget_show(btn_window);
+	// Add box to window
+	box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+	gtk_container_add(GTK_CONTAINER (window), box);
 
-	//if the button is clicked, solve the sudoku
-	g_signal_connect(button, "clicked", G_CALLBACK(test), NULL);
+	// Add the grid to the box
+	gtk_box_pack_start(GTK_BOX (box), super_grid, FALSE, FALSE, 0);
+	gtk_widget_show(super_grid);	
+
+	button_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+
+	// Slow solving
+	button = gtk_button_new_with_label("Slow Solve");
+	g_signal_connect(button, "clicked", G_CALLBACK(solve), &slow);
+	gtk_box_pack_start(GTK_BOX (button_box), button, FALSE, FALSE, 0);
+	gtk_widget_show(button);
+
+	// Medium solving
+	button = gtk_button_new_with_label("Medium Solve");
+	g_signal_connect(button, "clicked", G_CALLBACK(solve), &med);
+	gtk_box_pack_start(GTK_BOX (button_box), button, FALSE, FALSE, 0);
+	gtk_widget_show(button);
+
+	// Fast solving
+	button = gtk_button_new_with_label("Fast Solve");
+	g_signal_connect(button, "clicked", G_CALLBACK(solve), &fast);
+	gtk_box_pack_start(GTK_BOX (button_box), button, FALSE, FALSE, 0);
+	gtk_widget_show(button);
+
+	gtk_box_pack_start(GTK_BOX (box), button_box, FALSE, FALSE, 0);
+
+	gtk_widget_show(button_box);
+	gtk_widget_show(box);
+	gtk_widget_show(window);
 
 	gtk_main();
 	
